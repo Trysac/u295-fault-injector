@@ -1,0 +1,1 @@
+{"lang": "python", "package": "trysac-fault-injector", "commands": {"install": [["uv", "sync", "--all-extras"]], "check": [["uv", "run", "python", "scripts/check.py"]]}}
