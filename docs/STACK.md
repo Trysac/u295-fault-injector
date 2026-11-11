@@ -4,20 +4,14 @@
 
 | Tool | Why |
 |---|---|
-| Python >= 3.10 | Widest supported range that still allows modern typing syntax. |
-| uv | Fast, reproducible environments and builds on Windows and Linux. |
-| hatchling | Simple, standards-based build backend; no setup.py. |
-| ruff | Lint and format in one fast tool. |
-| mypy (strict) | Catches type errors before release; the package ships `py.typed`. |
-| pytest + pytest-cov | De facto standard test runner with branch coverage. |
-| gitleaks | Secret scanning locally and in CI. |
-| GitHub Actions + Dependabot | Thin CI wrapper over the local gates; weekly dependency updates. |
+| Python standard library | The only runtime dependency. The package uses `asyncio`, `collections`, `contextlib`, `dataclasses`, `fnmatch`, `functools`, `inspect`, `logging`, `random`, `threading`, `time` and `typing`. |
+| pytest | The provided tests are pytest modules: `tests/test_fault_injector.py` and `tests/test_plan.py`. |
+| `py.typed` | The package ships `src/fault_injector/py.typed` for typing consumers. |
 
 ## Discarded
 
 | Tool | Why not |
 |---|---|
-| Poetry | Slower, and uv covers the same needs with standard dependency groups. |
-| black + isort + flake8 | Replaced by ruff: one tool instead of three. |
-| tox / nox | The OS matrix lives in CI; locally a single `scripts/check.py` is enough. |
-| Shell scripts for gates | Not portable to Windows; the gates are a stdlib Python script. |
+| `unittest.mock` `side_effect` lists | The library instead provides declarative per-target rules, seeded probability, injected sleep callables and bounded assertable history. |
+| Network proxies and HTTP status simulators | Out of scope: the library injects in-process faults only. |
+| Production chaos tooling | Out of scope per `docs/PROJECT.md`. |

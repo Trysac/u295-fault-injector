@@ -1,24 +1,23 @@
-"""
-Inject faults into outbound calls in tests: wrap sync or async callables with rules that raise,
-delay through an injected sleep or return canned values, on deterministic triggers
+"""Inject faults into outbound calls in tests.
+
+Wrap sync or async callables with rules that raise, delay through an injected
+sleep, or return canned values, on deterministic triggers such as call counts
+or a seeded probability.
 """
 
-from __future__ import annotations
-
-__all__ = ["__version__", "normalize"]
+from .errors import FaultError
+from .faults import Delay, Raise, Return
+from .plan import FaultPlan, Injection
+from .rules import Rule
 
 __version__ = "0.1.0"
 
-
-def normalize(value: str) -> str:
-    """Return ``value`` trimmed and lower-cased.
-
-    Placeholder API created by the template: replace it with the utility's real behavior.
-
-    Raises:
-        ValueError: if ``value`` is empty or only whitespace.
-    """
-    cleaned = value.strip()
-    if not cleaned:
-        raise ValueError("value must not be empty")
-    return cleaned.lower()
+__all__ = [
+    "Delay",
+    "FaultError",
+    "FaultPlan",
+    "Injection",
+    "Raise",
+    "Return",
+    "Rule",
+]
