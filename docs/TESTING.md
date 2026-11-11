@@ -3,27 +3,22 @@
 ## Running
 
 ```sh
-uv run pytest --cov=fault_injector   # tests with coverage report
-uv run python scripts/check.py      # every gate, as CI and the factory run it
+pytest
 ```
+
+The provided test modules are under `tests/` and import the package as `fault_injector`.
 
 ## Policy
 
-- Branch coverage of `src/fault_injector` must stay at or above 80 %; the gate fails below it.
-- Tests exercise the public API (`import fault_injector`) and assert every observable effect:
-  return values, raised exceptions and their messages.
-- Each bug fix starts with a failing test that reproduces it.
-- Tests are deterministic: no network, no wall clock, no dependence on test order.
+Tests use pytest and exercise the public package API. Timing is made deterministic by passing fake `sleep` and `async_sleep` callables into `FaultPlan`; probabilistic rules use the plan `seed`. No network, real sleep or external service is required by the library.
 
 ## Tiers
 
-- Local tier (every gate run, coverage measured here): unit and property tests, plus conformance on small
-  fixtures kept in the repository.
-- CI tier: conformance that needs an external tool or a download. Mark them `@pytest.mark.conformance`; `scripts/check.py` deselects them locally
-  (unless `FABRICA_CI=1`). The CI `conformance` job sets `FABRICA_CI=1` and runs the full suite. Tools are installed
-  by the optional `ci/conformance-setup.sh` (bash, CI only; verify every download against a pinned SHA-256), and
-  tagged tests skip cleanly when their tool is missing.
+Only local pytest unit tests are present in the provided code: `tests/test_fault_injector.py` and `tests/test_plan.py`. No separate conformance tier or CI configuration is included.
 
 ## Layout
 
-`tests/test_<module>.py` mirrors each public module. Shared fixtures go in `tests/conftest.py`.
+- `tests/test_fault_injector.py`: public-surface and validation tests. It covers `__all__` exports, semver `__version__`, `FaultError` code and short message, invalid rule triggers, `Delay` seconds validation, target length validation, the 100-rule limit, `on_calls` triggering, `patch` restoring an attribute when the body raises, async raise/return/passthrough, async delay-then-raise, and the plan logger's `NullHandler`.
+- `tests/test_plan.py`: plan execution tests that import `FaultPlan`, `Rule`, `Raise`, `Return`, `Delay`, `Injection` and `FaultError`; it covers plan behaviour through the public API.
+
+No `conftest.py` or additional test file is present in the provided code.

@@ -9,4 +9,5 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
+- Added fault-injector library for declarative, deterministic fault injection in sync and async tests.
 - Initial project structure from the factory utility template.
